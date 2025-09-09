@@ -16,11 +16,12 @@
 					<th scope="col">Type</th>
 					<th scope="col">Build Date</th>
 					<th scope="col">Crew</th>
+					<th scope="col"></th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
-					var nr = 1;
+					int nr = 1;
 				}
 				@foreach ( var spaceship in Model)
 				{
@@ -30,6 +31,9 @@
 						<td>@spaceship.Classification</td>
 						<td>@spaceship.BuiltDate</td>
 						<td>@spaceship.Crew</td>
+						<td>
+							<a asp-action="delete" asp-controller="spaceships" asp-route-id="@spaceship.Id" class="btn btn-outline-danger">Delete</a>
+						</td>
 					</tr>
 					nr++;
 			}

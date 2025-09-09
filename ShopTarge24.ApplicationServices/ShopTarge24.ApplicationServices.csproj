@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShopTarge24.Data\ShopTarge24.Data.csproj" />
+  </ItemGroup>
+
 </Project>

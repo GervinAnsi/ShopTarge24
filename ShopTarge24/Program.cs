@@ -1,10 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
+using ShopTarge24.ApplicationServices.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
 
 builder.Services.AddDbContext<ShopTarge24Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
