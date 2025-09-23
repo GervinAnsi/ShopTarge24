@@ -1,12 +1,13 @@
-﻿using System.Linq.Expressions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ShopTarge24.Core.Dto;
-using ShopTarge24.Core.Domain;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 using ShopTarge24.Models.Spaceships;
+using ShopTarge24.Core.Domain;
+using ShopTARge24.Core.Dto;
 
-namespace ShopTarge24.Controllers
+
+namespace ShopTARge24.Controllers
 {
     public class SpaceshipsController : Controller
     {
@@ -16,23 +17,24 @@ namespace ShopTarge24.Controllers
         public SpaceshipsController
             (
                 ShopTarge24Context context,
-                ISpaceshipServices spaceshipservices
+                ISpaceshipServices spaceshipServices
             )
         {
             _context = context;
-            _spaceshipServices = spaceshipservices;
+            _spaceshipServices = spaceshipServices;
         }
+
 
         public IActionResult Index()
         {
             var result = _context.Spaceships
-                .Select(x => new SpaceshipIndexViewModel 
-                { 
+                .Select(x => new SpaceshipIndexViewModel
+                {
                     Id = x.Id,
                     Name = x.Name,
                     Classification = x.Classification,
                     BuiltDate = x.BuiltDate,
-                    Crew = x.Crew
+                    Crew = x.Crew,
                 });
 
             return View(result);
@@ -46,6 +48,7 @@ namespace ShopTarge24.Controllers
             return View("CreateUpdate", result);
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Create(SpaceshipCreateUpdateViewModel vm)
         {
@@ -58,10 +61,18 @@ namespace ShopTarge24.Controllers
                 Crew = vm.Crew,
                 EnginePower = vm.EnginePower,
                 CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                ModifiedAt = vm.ModifiedAt,
+                Files = vm.Files,
+                FileToApiDtos = vm.Image
+                    .Select(x => new FileToApiDto
+                    {
+                        Id = x.ImageId,
+                        ExistingFilePath = x.Filepath,
+                        SpaceshipId = x.SpaceshipId
+                    }).ToArray()
             };
 
-            var result = await _spaceshipServices.Create( dto );
+            var result = await _spaceshipServices.Create(dto);
 
             if (result == null)
             {
@@ -120,11 +131,10 @@ namespace ShopTarge24.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> Delete(Guid Id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var spaceship = await _spaceshipServices.DetailAsync(Id);
+            var spaceship = await _spaceshipServices.DetailAsync(id);
 
             if (spaceship == null)
             {

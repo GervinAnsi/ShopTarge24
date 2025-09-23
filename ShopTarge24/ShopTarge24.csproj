@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ShopTarge24.Data\ShopTarge24.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="multipleFileUpload\" />
+  </ItemGroup>
+
 </Project>
