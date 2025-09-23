@@ -4,7 +4,7 @@ using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 using ShopTarge24.Models.Spaceships;
 using ShopTarge24.Core.Domain;
-using ShopTARge24.Core.Dto;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ShopTARge24.Controllers
@@ -180,6 +180,14 @@ namespace ShopTARge24.Controllers
                 return NotFound();
             }
 
+            var images = await _context.FileToApis
+                .Where(x => x.SpaceshipId == id)
+                .Select(y => new ImageViewModel
+                {
+                    Filepath = y.ExistingFilePath,
+                    ImageId = y.Id
+                }).ToArrayAsync();
+
             //toimub viewModeliga mappimine
             var vm = new SpaceshipDetailsViewModel();
 
@@ -191,6 +199,8 @@ namespace ShopTARge24.Controllers
             vm.EnginePower = spaceship.EnginePower;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
+
+            vm.Images.AddRange(images);
 
             return View(vm);
         }

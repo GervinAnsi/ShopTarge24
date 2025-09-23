@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using ShopTarge24.ApplicationServices.Services;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
-using ShopTarge24.ApplicationServices.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,13 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "multipleFileUpload")),
+    RequestPath = "/multipleFileUpload"
+});
 
 app.MapControllerRoute(
     name: "default",

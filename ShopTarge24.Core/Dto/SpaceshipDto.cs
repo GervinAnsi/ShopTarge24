@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using ShopTARge24.Core.Dto;
+using ShopTarge24.Core.Dto;
 
 namespace ShopTarge24.Core.Dto
 {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopTarge24.Core.Dto
+namespace ShopTarge24.Core.Domain
 {
-    public class FileToApiDto
+    public class FileToApi
     {
         public Guid Id { get; set; }
         public string? ExistingFilePath { get; set; }
