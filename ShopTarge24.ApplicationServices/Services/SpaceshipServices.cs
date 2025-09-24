@@ -54,6 +54,7 @@ namespace ShopTarge24.ApplicationServices.Services
             spaceships.EnginePower = dto.EnginePower;
             spaceships.CreatedAt = dto.CreatedAt;
             spaceships.ModifiedAt = DateTime.Now;
+            _fileServices.FilesToApi(dto, spaceships);
 
             //tuleb db-s teha andmete uuendamine jauue oleku salvestamine
             _context.Spaceships.Update(spaceships);
