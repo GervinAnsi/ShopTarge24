@@ -12,6 +12,23 @@ namespace ShopTarge24.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Kindergartens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ChildrenCount = table.Column<int>(type: "int", nullable: false),
+                    KindergartenName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TeacherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Kindergartens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Spaceships",
                 columns: table => new
                 {
@@ -33,6 +50,9 @@ namespace ShopTarge24.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Kindergartens");
+
             migrationBuilder.DropTable(
                 name: "Spaceships");
         }

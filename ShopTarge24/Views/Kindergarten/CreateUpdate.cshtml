@@ -52,14 +52,14 @@ else
 
 		@if (Model.Id.HasValue)
 		{
-			<input asp-action="update" asp-controller="kindergartens" type="submit" class="btn btn-success" value="Update" />
+			<input asp-action="update" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Update" />
 		}
 		else
 		{
-			<input asp-action="create" asp-controller="kindergartens" type="submit" class="btn btn-success" value="Create" />
+			<input asp-action="create" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Create" />
 		}
 
-			<a asp-action="Index" asp-controller="kindergartens" class="btn btn-success">Back</a>
+			<a asp-action="Index" asp-controller="kindergarten" class="btn btn-success">Back</a>
 	</form>
 
 
