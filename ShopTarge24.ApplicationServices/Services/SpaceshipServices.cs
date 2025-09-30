@@ -79,6 +79,19 @@ namespace ShopTarge24.ApplicationServices.Services
             var result = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);
 
+            var images = await _context.FileToApis
+                .Where(x => x.SpaceshipId == id)
+                .Select(y => new FileToApiDto
+                {
+                    Id = y.Id,
+                    SpaceshipId = y.SpaceshipId,
+                    ExistingFilePath = y.ExistingFilePath,
+                }).ToArrayAsync();
+
+            foreach (var image in images)
+            {
+                await _fileServices.RemoveImageFromApi(image);
+            }
             _context.Spaceships.Remove(result);
             await _context.SaveChangesAsync();
 
