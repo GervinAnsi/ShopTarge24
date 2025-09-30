@@ -20,7 +20,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="multipleFileUpload\" />
+    <Folder Include="wwwroot\multipleFileUpload\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\multipleFileUpload\28a951d3-3b55-41d5-ab90-73befa7e01fa_d7f1e5bb-15dc-453b-9c13-9d0a99368380_81e5fce5-3dd9-439d-bff4-ec77fc1bcb05_Leonidas.webp" />
+    <None Include="wwwroot\multipleFileUpload\30b20766-9ad0-495b-befc-bc3c9401bcce_ef957f2a-b60c-4b68-ac22-18f82a7334ad_rocinante.jfif" />
+    <None Include="wwwroot\multipleFileUpload\4f8d5649-da04-4062-8824-dee40661832e_81e5fce5-3dd9-439d-bff4-ec77fc1bcb05_Leonidas.webp" />
+    <None Include="wwwroot\multipleFileUpload\81e5fce5-3dd9-439d-bff4-ec77fc1bcb05_Leonidas.webp" />
+    <None Include="wwwroot\multipleFileUpload\9b0a5f97-4e79-42eb-b066-ddc03bc6eaea_Leonidas.webp" />
+    <None Include="wwwroot\multipleFileUpload\9c9392a4-481c-4812-b3b3-2f203340b7c6_f8cf7da2-8588-4545-9a29-8ab42f985790_rocinante.jfif" />
+    <None Include="wwwroot\multipleFileUpload\ab81a392-8783-4a69-b8e1-6387e83e492e_9b0a5f97-4e79-42eb-b066-ddc03bc6eaea_Leonidas.webp" />
+    <None Include="wwwroot\multipleFileUpload\aeb1bc37-b32b-4253-84d7-1ec0dc592da4_ScipioAfricanus.jpg" />
+    <None Include="wwwroot\multipleFileUpload\c1d00d8a-9ca5-46f1-8cbf-da329002516c_f54d3bb2-81af-40c2-8dc4-69353acb27b0_ScipioAfricanus.jpg" />
+    <None Include="wwwroot\multipleFileUpload\d7f1e5bb-15dc-453b-9c13-9d0a99368380_81e5fce5-3dd9-439d-bff4-ec77fc1bcb05_Leonidas.webp" />
+    <None Include="wwwroot\multipleFileUpload\ed048a57-651c-47d1-9fb3-511b9be3f12c_aeb1bc37-b32b-4253-84d7-1ec0dc592da4_ScipioAfricanus.jpg" />
+    <None Include="wwwroot\multipleFileUpload\ef957f2a-b60c-4b68-ac22-18f82a7334ad_rocinante.jfif" />
+    <None Include="wwwroot\multipleFileUpload\f54d3bb2-81af-40c2-8dc4-69353acb27b0_ScipioAfricanus.jpg" />
+    <None Include="wwwroot\multipleFileUpload\f8cf7da2-8588-4545-9a29-8ab42f985790_rocinante.jfif" />
   </ItemGroup>
 
 </Project>

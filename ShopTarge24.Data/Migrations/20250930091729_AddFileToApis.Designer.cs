@@ -12,8 +12,8 @@ using ShopTarge24.Data;
 namespace ShopTarge24.Data.Migrations
 {
     [DbContext(typeof(ShopTarge24Context))]
-    [Migration("20250923100223_init")]
-    partial class init
+    [Migration("20250930091729_AddFileToApis")]
+    partial class AddFileToApis
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

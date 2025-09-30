@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ShopTarge24.Core\ShopTarge24.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
