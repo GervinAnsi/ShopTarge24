@@ -39,21 +39,27 @@ namespace ShopTarge24.ApplicationServices.Services
         public async Task<Kindergarten> Update(KindergartenDto dto)
         {
             //vaja leida doamini objekt, mida saaks mappida dto-ga
-            Kindergarten Kindergarten = new Kindergarten();
+            var kindergarten = await _context.Kindergartens
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-            Kindergarten.Id = Guid.NewGuid();
-            Kindergarten.GroupName = dto.GroupName;
-            Kindergarten.ChildrenCount = dto.ChildrenCount;
-            Kindergarten.KindergartenName = dto.KindergartenName;
-            Kindergarten.TeacherName = dto.TeacherName;
-            Kindergarten.CreatedAt = DateTime.Now;
-            Kindergarten.UpdatedAt = DateTime.Now;
+            if (kindergarten == null)
+            {
+                throw new Exception("Ei leia kindergartenit");
+            }
+
+            
+            kindergarten.GroupName = dto.GroupName;
+            kindergarten.ChildrenCount = dto.ChildrenCount;
+            kindergarten.KindergartenName = dto.KindergartenName;
+            kindergarten.TeacherName = dto.TeacherName;
+            kindergarten.CreatedAt = DateTime.Now;
+            kindergarten.UpdatedAt = DateTime.Now;
 
             //tuleb db-s teha andmete uuendamine jauue oleku salvestamine
-            _context.Kindergartens.Update(Kindergarten);
+            _context.Kindergartens.Update(kindergarten);
             await _context.SaveChangesAsync();
 
-            return Kindergarten;
+            return kindergarten;
         }
 
 
