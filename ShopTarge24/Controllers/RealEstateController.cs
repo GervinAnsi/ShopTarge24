@@ -2,9 +2,7 @@
 using ShopTarge24.Core.Dto;
 using ShopTarge24.Data;
 using ShopTarge24.ApplicationServices.Services;
-using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
-using ShopTarge24.Data;
 using ShopTarge24.Models.RealEstate;
 
 

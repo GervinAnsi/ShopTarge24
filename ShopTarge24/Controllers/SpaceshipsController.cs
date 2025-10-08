@@ -7,7 +7,7 @@ using ShopTarge24.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace ShopTARge24.Controllers
+namespace ShopTarge24.Controllers
 {
     public class SpaceshipsController : Controller
     {
