@@ -1,9 +1,11 @@
-﻿namespace ShopTarge24.Core.Dto
+﻿namespace ShopTarge24.Models.AccuWeathers
 {
-    public class AccuLocationWeatherResultDto
+    public class AccuWeatherViewModel
     {
         public string CityName { get; set; } = string.Empty;
-        public string CityCode { get; set; } = string.Empty;
+        //public string CityCode { get; set; }
+        //public int Rank { get; set; }
+
 
         public string EffectiveDate { get; set; } = string.Empty;
         public Int64 EffectiveEpochDate { get; set; }
