@@ -1,0 +1,12 @@
+﻿@model ShopTarge24.Models.ChuckNorris.ChuckNorrisViewModel
+
+<h1>Chuck Norris</h1>
+
+<div class="container mt-4">
+    <img class="image" src="@Model.Icon_url" alt="Chuck Norris" />
+    <p class="lead">@Model.Value</p>
+
+    <a class="btn btn-primary" asp-controller="ChuckNorris" asp-action="Index">
+        Chuck Norris wants to give you a joke
+    </a>
+</div>
