@@ -81,6 +81,20 @@ namespace ShopTarge24.ApplicationServices.Services
             _context.Kindergartens.Remove(result);
             await _context.SaveChangesAsync();
 
+            if (result == null)
+                return null;
+
+            var images = await _context.FileToApis
+                .Where (x=> x.KindergartenId == id)
+                .ToListAsync();
+
+            if (images.Count > 0)
+            {
+                _context.FileToApis.RemoveRange(images);
+            }
+
+            _context.Kindergartens.Remove(result);
+            await _context.SaveChangesAsync();
             return result;
         }
 
