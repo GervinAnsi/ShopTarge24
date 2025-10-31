@@ -1,8 +1,8 @@
 ﻿namespace ShopTarge24.Models.Kindergarten
 {
-    public class KindergartenCreateUpdateViewModel
+    public class KindergartenDetailsViewModel
     {
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         public string GroupName { get; set; }
         public int ChildrenCount { get; set; }
         public string KindergartenName { get; set; }
@@ -11,6 +11,6 @@
         public DateTime UpdatedAt { get; set; }
 
         public IList<IFormFile>? Files { get; set; }
-        public IEnumerable<ImageViewModel> Images { get; set; }
+        public List<ImageViewModel> Images { get; set; } = new();
     }
 }
