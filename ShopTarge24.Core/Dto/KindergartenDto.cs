@@ -1,4 +1,6 @@
-﻿namespace ShopTarge24.Core.Dto
+﻿using Microsoft.AspNetCore.Http;
+
+namespace ShopTarge24.Core.Dto
 {
     public class KindergartenDto
     {

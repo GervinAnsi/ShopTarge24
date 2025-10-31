@@ -1,4 +1,6 @@
-﻿namespace ShopTarge24.Models.Kindergarten
+﻿using ShopTarge24.Models.Spaceships;
+
+namespace ShopTarge24.Models.Kindergarten
 { 
     public class KindergartenDeleteViewModel
     {

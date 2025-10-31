@@ -1,10 +1,13 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ShopTarge24.ApplicationServices.Services;
 using ShopTarge24.Core.Domain;
 using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 using ShopTarge24.Models.Kindergarten;
+using ShopTarge24.Models.Spaceships;
 
 namespace ShopTarge24.Controllers
 {
@@ -90,14 +93,14 @@ namespace ShopTarge24.Controllers
 
             var images = await _context.FileToApis
                 .Where(x => x.KindergartenId == kindergarten.Id)
-                .Select(y => new ImageViemModel
+                .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
                     ImageId = y.Id,
                     KindergartenId = y.KindergartenId,
                     ImageTitle = y.ImageTitle,
                     ImageData = y.ImageData,
-                    images = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
+                    Images = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
                 })
                 .ToListAsync();
 
@@ -123,14 +126,14 @@ namespace ShopTarge24.Controllers
             {
                 vm.Images = await _context.FileToApis
                     .Where(x => x.KindergartenId == vm.Id)
-                    .Select(y => new BadImageFormatException()
+                    .Select(y => new ImageViewModel()
                     {
                         Filepath = y.ExistingFilePath,
                         ImageId = y.Id,
                         KindergartenId = y.KindergartenId,
                         ImageTitle = y.ImageTitle,
                         ImageData = y.ImageData,
-                        Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
+                        Images = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
                     })
                     .ToListAsync();
 
@@ -150,7 +153,7 @@ namespace ShopTarge24.Controllers
 
             var updated = await _kindergartenServices.Update(dto);
 
-            await fileServices.FilesToApi(dto, updated ?? new Kindergarten { Id = dto.Id });
+            await fileservices.FilesToApi(dto, updated ?? new Kindergarten { Id = dto.Id });
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = dto.Id });
@@ -168,12 +171,12 @@ namespace ShopTarge24.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Delete(Guid? Id)
+        public async Task<IActionResult> Delete(Guid Id)
         {
-            var kindergarten = await _kindergartenServices.DetailAsync(id);
+            var kindergarten = await _kindergartenServices.DetailAsync(Id);
             if (kindergarten == null) return NotFound();
 
-            var images = await_context.FileToApis
+            var images = await _context.FileToApis
                 .Where(x => x.KindergartenId == Id)
                 .Select(y => new ImageViewModel
                 {
@@ -182,7 +185,7 @@ namespace ShopTarge24.Controllers
                     KindergartenId = y.KindergartenId,
                     ImageTitle = y.ImageTitle,
                     ImageData = y.ImageData,
-                    Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
+                    Images = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
                 })
                 .ToListAsync();
 
@@ -200,7 +203,7 @@ namespace ShopTarge24.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmation(Guid? id)
+        public async Task<IActionResult> DeleteConfirmation(Guid id)
         {
             await _kindergartenServices.Delete(id);
             return RedirectToAction(nameof(Index));
@@ -208,7 +211,7 @@ namespace ShopTarge24.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
             var kindergarten = await _kindergartenServices.DetailAsync(id);
             if (kindergarten == null) return NotFound();
@@ -222,7 +225,7 @@ namespace ShopTarge24.Controllers
                     KindergartenId = y.KindergartenId,
                     ImageData = y.ImageData,
                     ImageTitle = y.ImageTitle,
-                    Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
+                    Images = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
                 })
                 .ToListAsync();
 
