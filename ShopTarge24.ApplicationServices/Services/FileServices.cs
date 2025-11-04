@@ -105,50 +105,6 @@ namespace ShopTarge24.ApplicationServices.Services
             }
         }
 
-        public async Task FilesToApi(KindergartenDto dto, Kindergarten domain)
-        {
-            if (dto.Files != null && dto.Files.Count > 0)
-            {
-                string uploadDir = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
-
-                if (!Directory.Exists(uploadDir))
-                {
-                    Directory.CreateDirectory(uploadDir);
-                }
-
-                foreach (var file in dto.Files)
-                {
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadDir, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(fileStream);
-                    }
-
-                    byte[] imageData;
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(memoryStream);
-                        imageData = memoryStream.ToArray();
-                    }
-
-                    var path = new FileToApi
-                    {
-                        Id = Guid.NewGuid(),
-                        ExistingFilePath = uniqueFileName,
-                        KindergartenId = domain.Id,
-                        ImageData = imageData,
-                        ImageTitle = file.FileName
-                    };
-
-                    await _context.FileToApis.AddAsync(path);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-        }
-
 
 
 

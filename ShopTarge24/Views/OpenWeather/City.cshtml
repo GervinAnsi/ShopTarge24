@@ -1,0 +1,57 @@
+﻿@model ShopTarge24.Core.Dto.OpenWeatherRootDto
+
+<div class="container">
+    <h2>Forecast for the selected city</h2>
+    <h2>@Html.DisplayFor(model => model.CityName)</h2>
+    <hr />
+    <dl class="row text-dark">
+        <div>
+            <dt class="col-sm-2">
+                Temperature:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TempValue) °C
+            </dd>
+        </div>
+        <div>
+            <dt class="col-sm-2">
+                Temp Feels like:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TempFeelsLike) °C
+            </dd>
+        </div>
+        <div>
+            <dt class="col-sm-2">
+                Humidity:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Humidity) %
+            </dd>
+        </div>
+        <div>
+            <dt class="col-sm-2">
+                Pressure:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Pressure) Hpa
+            </dd>
+        </div>
+        <div>
+            <dt class="col-sm-2">
+                Wind Speed:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.WindSpeed) Km/h
+            </dd>
+        </div>
+        <div>
+            <dt class="col-sm-2">
+                Weather Condition:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.WeatherCondition)
+            </dd>
+        </div>
+    </dl>
+</div>
