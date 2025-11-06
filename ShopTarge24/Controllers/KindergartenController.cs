@@ -12,18 +12,15 @@ namespace ShopTarge24.Controllers
     {
         private readonly ShopTarge24Context _context;
         private readonly IKindergartenServices _kindergartenServices;
-        private readonly IFileServices fileservices;
 
         public KindergartenController
             (
                 ShopTarge24Context context,
-                IKindergartenServices kindergartenservices,
-                IFileServices fileServices
+                IKindergartenServices kindergartenservices
             )
         {
             _context = context;
             _kindergartenServices = kindergartenservices;
-            this.fileservices = fileServices;
         }
 
         public IActionResult Index()
@@ -50,18 +47,11 @@ namespace ShopTarge24.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(KindergartenCreateUpdateViewModel vm)
         {
-
-            if (!ModelState.IsValid)
-            {
-                return View("CreateUpdate", vm);
-            }
-
             var dto = new KindergartenDto()
             {
-                Id = Guid.NewGuid(),
+                Id = vm.Id ?? Guid.Empty,
                 GroupName = vm.GroupName,
                 ChildrenCount = vm.ChildrenCount,
                 KindergartenName = vm.KindergartenName,
@@ -70,12 +60,14 @@ namespace ShopTarge24.Controllers
                 UpdatedAt = vm.UpdatedAt
             };
 
-            var created = await _kindergartenServices.Create( dto );
+            var result = await _kindergartenServices.Create( dto );
 
-            await fileservices.FilesToApi(dto, created ?? new Kindergarten { Id = dto.Id });
+            if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details), new { id = dto.Id });
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -88,56 +80,22 @@ namespace ShopTarge24.Controllers
                 return NotFound();
             }
 
-            var images = await _context.FileToApis
-                .Where(x => x.KindergartenId == kindergarten.Id)
-                .Select(y => new ImageViemModel
-                {
-                    Filepath = y.ExistingFilePath,
-                    ImageId = y.Id,
-                    KindergartenId = y.KindergartenId,
-                    ImageTitle = y.ImageTitle,
-                    ImageData = y.ImageData,
-                    images = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
-                })
-                .ToListAsync();
+            var vm = new KindergartenCreateUpdateViewModel();
 
-            var vm = new KindergartenCreateUpdateViewModel
-            {
-                Id = kindergarten.Id,
-                GroupName = kindergarten.GroupName,
-                ChildrenCount = kindergarten.ChildrenCount,
-                KindergartenName = kindergarten.KindergartenName,
-                TeacherName = kindergarten.TeacherName,
-                Images = images
-            };
+            vm.Id = kindergarten.Id;
+            vm.GroupName = kindergarten.GroupName;
+            vm.ChildrenCount = kindergarten.ChildrenCount;
+            vm.KindergartenName = kindergarten.KindergartenName;
+            vm.TeacherName = kindergarten.TeacherName;
+            vm.CreatedAt = kindergarten.CreatedAt;
+            vm.UpdatedAt = kindergarten.UpdatedAt;
 
             return View("CreateUpdate", vm);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(KindergartenCreateUpdateViewModel vm)
         {
-
-            if (!ModelState.IsValid)
-            {
-                vm.Images = await _context.FileToApis
-                    .Where(x => x.KindergartenId == vm.Id)
-                    .Select(y => new BadImageFormatException()
-                    {
-                        Filepath = y.ExistingFilePath,
-                        ImageId = y.Id,
-                        KindergartenId = y.KindergartenId,
-                        ImageTitle = y.ImageTitle,
-                        ImageData = y.ImageData,
-                        Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
-                    })
-                    .ToListAsync();
-
-                return View("CreateUpdate", vm);
-            }
-
-
             var dto = new KindergartenDto()
             {
                 Id = vm.Id ?? Guid.Empty,
@@ -145,64 +103,59 @@ namespace ShopTarge24.Controllers
                 ChildrenCount = vm.ChildrenCount,
                 KindergartenName = vm.KindergartenName,
                 TeacherName = vm.TeacherName,
-                Files = vm.Files
+                CreatedAt = vm.CreatedAt,
+                UpdatedAt = vm.UpdatedAt
             };
 
-            var updated = await _kindergartenServices.Update(dto);
+            var result = await _kindergartenServices.Update(dto);
 
-            await fileServices.FilesToApi(dto, updated ?? new Kindergarten { Id = dto.Id });
+            if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details), new { id = dto.Id });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> RemoveImage(Guid ImageId, Guid KindergartenId)
-        {
-            await fileservices.RemoveImageFromApi(new FileToApiDto { Id = ImageId });
-
-            return RedirectToAction("Update", "Kindergarten", new { id = KindergartenId });
+            return RedirectToAction(nameof(Index));
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Delete(Guid? Id)
         {
-            var kindergarten = await _kindergartenServices.DetailAsync(id);
-            if (kindergarten == null) return NotFound();
-
-            var images = await_context.FileToApis
-                .Where(x => x.KindergartenId == Id)
-                .Select(y => new ImageViewModel
-                {
-                    Filepath = y.ExistingFilePath,
-                    ImageId = y.Id,
-                    KindergartenId = y.KindergartenId,
-                    ImageTitle = y.ImageTitle,
-                    ImageData = y.ImageData,
-                    Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
-                })
-                .ToListAsync();
-
-            var vm = new KindergartenDeleteViewModel
+            if(Id == null || Id == Guid.Empty)
             {
-                Id = kindergarten.Id,
-                GroupName = kindergarten.GroupName,
-                KindergartenName = kindergarten.KindergartenName,
-                TeacherName = kindergarten.TeacherName,
-                Images = images
-            };
+                return BadRequest();
+            }
+
+            var kindergarten = await _kindergartenServices.DetailAsync(Id.Value);
+
+            if (kindergarten == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new KindergartenDeleteViewModel();
+
+            vm.Id = kindergarten.Id;
+            vm.GroupName = kindergarten.GroupName;
+            vm.ChildrenCount = kindergarten.ChildrenCount;
+            vm.KindergartenName = kindergarten.KindergartenName;
+            vm.TeacherName = kindergarten.TeacherName;
+            vm.CreatedAt = kindergarten.CreatedAt;
+            vm.UpdatedAt = kindergarten.UpdatedAt;
 
             return View(vm);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmation(Guid? id)
         {
-            await _kindergartenServices.Delete(id);
+            if (id == null || id == Guid.Empty)
+            {
+                return BadRequest(); // or RedirectToAction("Index");
+            }
+
+            await _kindergartenServices.Delete(id.Value);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -210,32 +163,28 @@ namespace ShopTarge24.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid? id)
         {
-            var kindergarten = await _kindergartenServices.DetailAsync(id);
-            if (kindergarten == null) return NotFound();
+            if (id == null || id == Guid.Empty)
+            {
+                return BadRequest(); // or RedirectToAction("Index");
+            }
 
-            var images = await _context.FileToApis
-                .Where(x => x.KindergartenId == kindergarten.Id)
-                .Select(y => new ImageViewModel
-                {
-                    Filepath = y.ExistingFilePath,
-                    ImageId = y.Id,
-                    KindergartenId = y.KindergartenId,
-                    ImageData = y.ImageData,
-                    ImageTitle = y.ImageTitle,
-                    Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
-                })
-                .ToListAsync();
+            var kindergarten = await _kindergartenServices.DetailAsync(id.Value);
+
+            if (kindergarten == null)
+            {
+                return NotFound();
+            }
 
             //toimub viewModeliga mappimine
-            var vm = new KindergartenDetailsViewModel
-            {
-                Id = kindergarten.Id,
-                GroupName = kindergarten.GroupName,
-                ChildrenCount = kindergarten.ChildrenCount,
-                KindergartenName = kindergarten.KindergartenName,
-                TeacherName = kindergarten.TeacherName,
-                Images = images
-            };
+            var vm = new KindergartenDetailsViewModel();
+
+            vm.Id = kindergarten.Id;
+            vm.GroupName = kindergarten.GroupName;
+            vm.ChildrenCount = kindergarten.ChildrenCount;
+            vm.KindergartenName = kindergarten.KindergartenName;
+            vm.TeacherName = kindergarten.TeacherName;
+            vm.CreatedAt = kindergarten.CreatedAt;
+            vm.UpdatedAt = kindergarten.UpdatedAt;
 
             return View(vm);
         }

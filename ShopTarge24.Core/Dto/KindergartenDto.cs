@@ -9,8 +9,5 @@
         public string TeacherName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
-        public IList<IFormFile> Files { get; set; }
-        public FileToApiDto[]? fileToApiDtos { get; set; }
     }
 }
