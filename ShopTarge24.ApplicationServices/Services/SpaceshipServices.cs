@@ -4,18 +4,22 @@ using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 
-namespace ShopTarge24.ApplicationServices.Services
+
+namespace ShopTARge24.ApplicationServices.Services
 {
     public class SpaceshipServices : ISpaceshipServices
     {
         private readonly ShopTarge24Context _context;
+        private readonly IFileServices _fileServices;
 
         public SpaceshipServices
             (
-                ShopTarge24Context context
+                ShopTarge24Context context,
+                IFileServices fileServices
             )
         {
             _context = context;
+            _fileServices = fileServices;
         }
 
         public async Task<Spaceships> Create(SpaceshipDto dto)
@@ -23,16 +27,17 @@ namespace ShopTarge24.ApplicationServices.Services
             Spaceships spaceships = new Spaceships();
 
             spaceships.Id = Guid.NewGuid();
-            spaceships.Name = dto.Name; 
+            spaceships.Name = dto.Name;
             spaceships.Classification = dto.Classification;
             spaceships.BuiltDate = dto.BuiltDate;
             spaceships.Crew = dto.Crew;
             spaceships.EnginePower = dto.EnginePower;
             spaceships.CreatedAt = DateTime.Now;
             spaceships.ModifiedAt = DateTime.Now;
+            _fileServices.FilesToApi(dto, spaceships);
 
             await _context.Spaceships.AddAsync(spaceships);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
 
             return spaceships;
         }
@@ -50,6 +55,7 @@ namespace ShopTarge24.ApplicationServices.Services
             spaceships.EnginePower = dto.EnginePower;
             spaceships.CreatedAt = dto.CreatedAt;
             spaceships.ModifiedAt = DateTime.Now;
+            _fileServices.FilesToApi(dto, spaceships);
 
             //tuleb db-s teha andmete uuendamine jauue oleku salvestamine
             _context.Spaceships.Update(spaceships);
@@ -57,8 +63,6 @@ namespace ShopTarge24.ApplicationServices.Services
 
             return spaceships;
         }
-
-
 
         public async Task<Spaceships> DetailAsync(Guid id)
         {
@@ -68,18 +72,25 @@ namespace ShopTarge24.ApplicationServices.Services
             return result;
         }
 
-        public async Task<Spaceships?> Delete(Guid id)
+        public async Task<Spaceships> Delete(Guid id)
         {
-
             var result = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);
 
+            var images = await _context.FileToApis
+                .Where(x => x.SpaceshipId == id)
+                .Select(y => new FileToApiDto
+                {
+                    Id = y.Id,
+                    SpaceshipId = y.SpaceshipId,
+                    ExistingFilePath = y.ExistingFilePath,
+                }).ToArrayAsync();
+
+            await _fileServices.RemoveImagesFromApi(images);
             _context.Spaceships.Remove(result);
             await _context.SaveChangesAsync();
 
             return result;
         }
-
-
     }
 }
