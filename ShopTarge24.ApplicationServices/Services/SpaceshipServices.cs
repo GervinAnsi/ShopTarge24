@@ -81,7 +81,7 @@ namespace ShopTARge24.ApplicationServices.Services
                 .Where(x => x.SpaceshipId == id)
                 .Select(y => new FileToApiDto
                 {
-                    Id = y.Id,
+                    ImageId = y.Id,
                     SpaceshipId = y.SpaceshipId,
                     ExistingFilePath = y.ExistingFilePath,
                 }).ToArrayAsync();

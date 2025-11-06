@@ -59,7 +59,7 @@ namespace ShopTARge24.ApplicationServices.Services
         {
             //kui soovin kustutada, siis pean l'bi Id pildi ülesse otsima
             var imageId = await _context.FileToApis
-                .FirstOrDefaultAsync(x => x.Id == dto.Id);
+                .FirstOrDefaultAsync(x => x.Id == dto.ImageId);
 
             //kus asuvad pildid, mida hakatakse kustutama
             var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"

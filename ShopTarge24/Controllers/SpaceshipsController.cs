@@ -67,7 +67,7 @@ namespace ShopTARge24.Controllers
                 FileToApiDtos = vm.Image
                     .Select(x => new FileToApiDto
                     {
-                        Id = x.ImageId,
+                        ImageId = x.ImageId,
                         ExistingFilePath = x.Filepath,
                         SpaceshipId = x.SpaceshipId
                     }).ToArray()
@@ -133,7 +133,7 @@ namespace ShopTARge24.Controllers
                 FileToApiDtos = vm.Image
                     .Select(x => new FileToApiDto
                     {
-                        Id = x.ImageId,
+                        ImageId = x.ImageId,
                         ExistingFilePath = x.Filepath,
                         SpaceshipId = x.SpaceshipId
                     }).ToArray()
@@ -231,25 +231,40 @@ namespace ShopTARge24.Controllers
             return View(vm);
         }
 
-        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        //public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        //{
+        //    //tuleb ühendada dto ja vm
+        //    //Id peab saama edastatud andmebaasi
+        //    var dto = new FileToApiDto()
+        //    {
+        //        ImageId = vm.ImageId
+        //    };
+
+        //    //kutsu välja vastav serviceclassi meetod
+        //    var image = await _fileServices.RemoveImageFromApi(dto);
+
+        //    //kui on null, siis vii Index vaatesse
+        //    if (image == null)
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteImage(Guid id, Guid spaceshipId)
         {
-            //tuleb ühendada dto ja vm
-            //Id peab saama edastatud andmebaasi
             var dto = new FileToApiDto()
             {
-                Id = vm.ImageId
+                ImageId = id,
+                SpaceshipId = spaceshipId
             };
 
-            //kutsu välja vastav serviceclassi meetod
-            var image = await _fileServices.RemoveImageFromApi(dto);
+            await _fileServices.RemoveImageFromApi(dto);
 
-            //kui on null, siis vii Index vaatesse
-            if (image == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", new {id = spaceshipId});
         }
     }
 }
