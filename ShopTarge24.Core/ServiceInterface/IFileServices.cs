@@ -1,4 +1,5 @@
-﻿using ShopTarge24.Core.Domain;
+﻿using System.Xml;
+using ShopTarge24.Core.Domain;
 using ShopTarge24.Core.Dto;
 
 namespace ShopTarge24.Core.ServiceInterface
@@ -11,5 +12,10 @@ namespace ShopTarge24.Core.ServiceInterface
 
         Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos);
         void UploadFilesToDatabase(RealEstateDto dto, RealEstate realEstate);
+    }
+}
+        void FilesToApi(KindergartenDto dto, Kindergarten domain);
+        Task<FileToApi> RemoveImageFromApi(FileToApiDto dto);
+        Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos);
     }
 }

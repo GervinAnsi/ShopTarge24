@@ -1,11 +1,16 @@
-﻿namespace ShopTarge24.Core.Dto
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ShopTarge24.Core.Dto
 {
     public class FileToApiDto
     {
-        public Guid Id { get; set; }
+        public Guid ImageId { get; set; }
         public string? ExistingFilePath { get; set; }
         public Guid? SpaceshipId { get; set; }
         public Guid? KindergartenId { get; set; }
-        public Guid? RealEstateId { get; set; }
     }
 }

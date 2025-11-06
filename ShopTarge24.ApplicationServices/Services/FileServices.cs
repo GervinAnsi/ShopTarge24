@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.Xml;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using ShopTarge24.Core.Domain;
 using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
@@ -27,25 +29,20 @@ namespace ShopTarge24.ApplicationServices.Services
         {
             if (dto.Files != null && dto.Files.Count > 0)
             {
-                string uploadDir = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
-                if (!Directory.Exists(uploadDir))
+                if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
                 {
-                    Directory.CreateDirectory(uploadDir);
+                    Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
                 }
 
                 foreach (var file in dto.Files)
                 {
+                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadDir, uniqueFileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
-                    }
-
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        file.CopyTo(memoryStream);
 
                         FileToApi path = new FileToApi
                         {
@@ -72,12 +69,30 @@ namespace ShopTarge24.ApplicationServices.Services
                 if (!Directory.Exists(uploadDir))
                 {
                     Directory.CreateDirectory(uploadDir);
+                            ExistingFilePath = uniqueFileName,
+                            SpaceshipId = domain.Id
+                        };
+
+                        _context.FileToApis.AddAsync(path);
+                    }
+                }
+            }
+        }
+
+        public void FilesToApi(KindergartenDto dto, Kindergarten domain)
+        {
+            if (dto.Files != null && dto.Files.Count > 0)
+            {
+                if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
+                {
+                    Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
                 }
 
                 foreach (var file in dto.Files)
                 {
+                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadDir, uniqueFileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
@@ -91,32 +106,26 @@ namespace ShopTarge24.ApplicationServices.Services
                         FileToApi path = new FileToApi
                         {
                             Id = Guid.NewGuid(),
-                            ExistingFilePath = Path.Combine("multipleFileUpload", uniqueFileName),
-                            RealEstateId = domain.Id,
-                            ImageTitle = file.FileName,
-                            ImageData = memoryStream.ToArray()
+                            ExistingFilePath = uniqueFileName,
+                            KindergartenId = domain.Id
                         };
 
-                        _context.FileToApis.Add(path);
+                        _context.FileToApis.AddAsync(path);
                     }
                 }
-
-                _context.SaveChanges();
+                
             }
+
         }
-
-
-
-
 
         public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
         {
-            //kui soovin kustutada siis pean läbi Id pildi ülesse otsima
+            //kui soovin kustutada, siis pean l'bi Id pildi ülesse otsima
             var imageId = await _context.FileToApis
-                .FirstOrDefaultAsync(x => x.Id == dto.Id);
+                .FirstOrDefaultAsync(x => x.Id == dto.ImageId);
 
-            //kus asuvad pildid mida hakatakse kustutama
-            var filePath = _webHost.ContentRootPath + "\\wwwroot\\"
+            //kus asuvad pildid, mida hakatakse kustutama
+            var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
                 + imageId.ExistingFilePath;
 
             if (File.Exists(filePath))
@@ -132,21 +141,20 @@ namespace ShopTarge24.ApplicationServices.Services
 
         public async Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos)
         {
-            //Mitme pildi korraga kustutamine
             foreach (var dto in dtos)
             {
-                var image = await _context.FileToApis
-                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var imageId = await _context.FileToApis
+                    .FirstOrDefaultAsync(x => x.ExistingFilePath == dto.ExistingFilePath);
 
                 var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-                    + image.ExistingFilePath;
+                    + imageId.ExistingFilePath;
 
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
                 }
 
-                _context.FileToApis.Remove(image);
+                _context.FileToApis.Remove(imageId);
                 await _context.SaveChangesAsync();
             }
 

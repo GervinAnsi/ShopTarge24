@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 using ShopTarge24.Models.Spaceships;
-using ShopTarge24.Core.Domain;
-using Microsoft.EntityFrameworkCore;
 
-
-namespace ShopTarge24.Controllers
+namespace ShopTARge24.Controllers
 {
     public class SpaceshipsController : Controller
     {
@@ -20,7 +18,6 @@ namespace ShopTarge24.Controllers
                 ShopTarge24Context context,
                 ISpaceshipServices spaceshipServices,
                 IFileServices fileServices
-            
             )
         {
             _context = context;
@@ -70,7 +67,7 @@ namespace ShopTarge24.Controllers
                 FileToApiDtos = vm.Image
                     .Select(x => new FileToApiDto
                     {
-                        Id = x.ImageId,
+                        ImageId = x.ImageId,
                         ExistingFilePath = x.Filepath,
                         SpaceshipId = x.SpaceshipId
                     }).ToArray()
@@ -136,7 +133,7 @@ namespace ShopTarge24.Controllers
                 FileToApiDtos = vm.Image
                     .Select(x => new FileToApiDto
                     {
-                        Id = x.ImageId,
+                        ImageId = x.ImageId,
                         ExistingFilePath = x.Filepath,
                         SpaceshipId = x.SpaceshipId
                     }).ToArray()
@@ -151,7 +148,6 @@ namespace ShopTarge24.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
@@ -219,7 +215,7 @@ namespace ShopTarge24.Controllers
                     ImageId = y.Id
                 }).ToArrayAsync();
 
-            //toimub viewModeliga mappimine
+
             var vm = new SpaceshipDetailsViewModel();
 
             vm.Id = spaceship.Id;
@@ -235,26 +231,40 @@ namespace ShopTarge24.Controllers
             return View(vm);
         }
 
-        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        //public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        //{
+        //    //tuleb ühendada dto ja vm
+        //    //Id peab saama edastatud andmebaasi
+        //    var dto = new FileToApiDto()
+        //    {
+        //        ImageId = vm.ImageId
+        //    };
+
+        //    //kutsu välja vastav serviceclassi meetod
+        //    var image = await _fileServices.RemoveImageFromApi(dto);
+
+        //    //kui on null, siis vii Index vaatesse
+        //    if (image == null)
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteImage(Guid id, Guid spaceshipId)
         {
-            //tuleb uhendada dto ja vm
-            //id peab saama edastatud andmebaasi
             var dto = new FileToApiDto()
             {
-                Id = vm.ImageId
+                ImageId = id,
+                SpaceshipId = spaceshipId
             };
 
-            //kutsu valja vastav serviceclassi meetod
-            var image = await _fileServices.RemoveImageFromApi(dto);
+            await _fileServices.RemoveImageFromApi(dto);
 
-            //kui on null siis vii index vaatesse
-
-            if (image == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", new {id = spaceshipId});
         }
     }
 }

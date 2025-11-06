@@ -4,7 +4,8 @@ using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 
-namespace ShopTarge24.ApplicationServices.Services
+
+namespace ShopTARge24.ApplicationServices.Services
 {
     public class SpaceshipServices : ISpaceshipServices
     {
@@ -26,7 +27,7 @@ namespace ShopTarge24.ApplicationServices.Services
             Spaceships spaceships = new Spaceships();
 
             spaceships.Id = Guid.NewGuid();
-            spaceships.Name = dto.Name; 
+            spaceships.Name = dto.Name;
             spaceships.Classification = dto.Classification;
             spaceships.BuiltDate = dto.BuiltDate;
             spaceships.Crew = dto.Crew;
@@ -36,7 +37,7 @@ namespace ShopTarge24.ApplicationServices.Services
             _fileServices.FilesToApi(dto, spaceships);
 
             await _context.Spaceships.AddAsync(spaceships);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
 
             return spaceships;
         }
@@ -63,8 +64,6 @@ namespace ShopTarge24.ApplicationServices.Services
             return spaceships;
         }
 
-
-
         public async Task<Spaceships> DetailAsync(Guid id)
         {
             var result = await _context.Spaceships
@@ -73,9 +72,8 @@ namespace ShopTarge24.ApplicationServices.Services
             return result;
         }
 
-        public async Task<Spaceships?> Delete(Guid id)
+        public async Task<Spaceships> Delete(Guid id)
         {
-
             var result = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -83,21 +81,16 @@ namespace ShopTarge24.ApplicationServices.Services
                 .Where(x => x.SpaceshipId == id)
                 .Select(y => new FileToApiDto
                 {
-                    Id = y.Id,
+                    ImageId = y.Id,
                     SpaceshipId = y.SpaceshipId,
                     ExistingFilePath = y.ExistingFilePath,
                 }).ToArrayAsync();
 
-            foreach (var image in images)
-            {
-                await _fileServices.RemoveImageFromApi(image);
-            }
+            await _fileServices.RemoveImagesFromApi(images);
             _context.Spaceships.Remove(result);
             await _context.SaveChangesAsync();
 
             return result;
         }
-
-
     }
 }
