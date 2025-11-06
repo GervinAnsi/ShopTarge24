@@ -53,6 +53,25 @@
             @Html.DisplayFor(model => model.UpdatedAt)
         </div>
     </dl>
+    
+    @foreach (var image in Model.Images)
+    {
+        <div class="col-lg-12 text-md-center mb-auto">
+            <partial name="_Images" model="image" />
+            <form asp-action="DeleteImage"
+                asp-controller="Kindergarten"
+                method="post"
+                class="mt-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@image.ImageId" />
+                <input type="hidden" name="kindergartenId" value="@Model.Id" />
+                <button type="submit" class="btn btn-sm btn-danger">
+                    Kustuta
+                </button>
+            </form>
+
+        </div>
+    }
 
     <hr />
     <a asp-action="Index" asp-controller="kindergarten" class="btn btn-danger">Back</a>
