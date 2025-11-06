@@ -1,14 +1,11 @@
-﻿using System.Xml;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using ShopTarge24.Core.Domain;
 using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
-using Microsoft.EntityFrameworkCore;
 
-
-namespace ShopTarge24.ApplicationServices.Services
+namespace ShopTARge24.ApplicationServices.Services
 {
     public class FileServices : IFileServices
     {
@@ -47,28 +44,6 @@ namespace ShopTarge24.ApplicationServices.Services
                         FileToApi path = new FileToApi
                         {
                             Id = Guid.NewGuid(),
-                            ExistingFilePath = Path.Combine("multipleFileUpload", uniqueFileName),
-                            SpaceshipId = domain.Id,
-                            ImageTitle = file.FileName,
-                            ImageData = memoryStream.ToArray()
-                        };
-
-                        _context.FileToApis.Add(path);
-                    }
-                }
-
-                _context.SaveChanges();
-            }
-        }
-
-        public void FilesToApi(RealEstateDto dto, RealEstate domain)
-        {
-            if (dto.Files != null && dto.Files.Count > 0)
-            {
-                string uploadDir = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
-                if (!Directory.Exists(uploadDir))
-                {
-                    Directory.CreateDirectory(uploadDir);
                             ExistingFilePath = uniqueFileName,
                             SpaceshipId = domain.Id
                         };
@@ -78,7 +53,6 @@ namespace ShopTarge24.ApplicationServices.Services
                 }
             }
         }
-
         public void FilesToApi(KindergartenDto dto, Kindergarten domain)
         {
             if (dto.Files != null && dto.Files.Count > 0)
@@ -94,28 +68,31 @@ namespace ShopTarge24.ApplicationServices.Services
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-
+                    byte[] imageBytes;
                     using (var memoryStream = new MemoryStream())
                     {
                         file.CopyTo(memoryStream);
-
-                        FileToApi path = new FileToApi
-                        {
-                            Id = Guid.NewGuid(),
-                            ExistingFilePath = uniqueFileName,
-                            KindergartenId = domain.Id
-                        };
-
-                        _context.FileToApis.AddAsync(path);
+                        imageBytes = memoryStream.ToArray();
                     }
-                }
-                
-            }
 
+                    // Salvesta kettale
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        fileStream.Write(imageBytes, 0, imageBytes.Length);
+                    }
+
+                    FileToApi path = new FileToApi
+                    {
+                        Id = Guid.NewGuid(),
+                        ExistingFilePath = uniqueFileName,
+                        ImageTitle = file.FileName,
+                        ImageData = imageBytes,
+                        KindergartenId = domain.Id
+                    };
+
+                    _context.FileToApis.Add(path);
+                }
+            }
         }
 
         public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
@@ -161,16 +138,15 @@ namespace ShopTarge24.ApplicationServices.Services
             return null;
         }
 
-        public void UploadFilesToDataBase(RealEstateDto dto, RealEstate domain)
+        public void UploadFilesToDatabase(RealEstateDto dto, RealEstate domain)
         {
-            //Toimub kontroll kas on vähemalt üks fail või mitu
+            //toimub kontroll, kas on v'hemalt [ks fail v]i mitu
             if (dto.Files != null && dto.Files.Count > 0)
             {
-
-                //Tuleb kasutada foreach, et mitu faili ülesse laadida
+                //tuleb kasutada foreachi et mitu faili [lesse laadida
                 foreach (var file in dto.Files)
                 {
-                    //Foreachi sees tuleb kasutada using'ut
+                    //foreachi sees tuleb kasutada using-t
                     using (var target = new MemoryStream())
                     {
                         FileToDatabase files = new FileToDatabase()
@@ -179,37 +155,13 @@ namespace ShopTarge24.ApplicationServices.Services
                             ImageTitle = file.FileName,
                             RealEstateId = domain.Id
                         };
-                    }
 
-                    //Andmed salvestada andmebaasi
+                        file.CopyTo(target);
+                        files.ImageData = target.ToArray();
 
-                }
-            }
-        }
-
-        public void UploadFilesToDatabase(RealEstateDto dto, RealEstate realEstate)
-        {
-            if (dto.Files != null && dto.Files.Count > 0)
-            {
-                foreach (var file in dto.Files)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        file.CopyTo(memoryStream);
-
-                        FileToApi image = new FileToApi
-                        {
-                            Id = Guid.NewGuid(),
-                            RealEstateId = realEstate.Id,
-                            ImageTitle = file.FileName,
-                            ImageData = memoryStream.ToArray()
-                        };
-
-                        _context.FileToApis.Add(image);
+                        _context.FileToDatabases.Add(files);
                     }
                 }
-
-                _context.SaveChanges();
             }
         }
     }

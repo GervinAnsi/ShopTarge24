@@ -47,12 +47,12 @@ namespace ShopTarge24.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ChildrenCount = table.Column<int>(type: "int", nullable: false),
-                    KindergartenName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TeacherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChildrenCount = table.Column<int>(type: "int", nullable: true),
+                    KindergartenName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TeacherName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
