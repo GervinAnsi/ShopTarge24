@@ -5,7 +5,7 @@ using ShopTarge24.Core.Dto;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 
-namespace ShopTARge24.ApplicationServices.Services
+namespace ShopTarge24.ApplicationServices.Services
 {
     public class FileServices : IFileServices
     {
@@ -163,6 +163,39 @@ namespace ShopTARge24.ApplicationServices.Services
                     }
                 }
             }
+        }
+
+        public void UploadFilesToDatabase(KindergartenDto dto, Kindergarten domain)
+        {
+            if (dto.Files == null || dto.Files.Count == 0) return;
+
+            foreach (var file in dto.Files)
+            {
+                using var ms = new MemoryStream();
+                file.CopyTo(ms);
+                var bytes = ms.ToArray();
+
+                var fileDb = new FileToDatabase
+                {
+                    Id = Guid.NewGuid(),
+                    ImageTitle = file.FileName,
+                    ImageData = bytes,
+                    KindergartenId = domain.Id
+                };
+
+                var fileApi = new FileToApi
+                {
+                    Id = Guid.NewGuid(),
+                    ImageTitle = file.FileName,
+                    ImageData = bytes,
+                    KindergartenId = domain.Id
+                };
+
+                _context.FileToDatabases.Add(fileDb);
+                _context.FileToApis.Add(fileApi);
+            }
+
+            _context.SaveChanges();
         }
     }
 }

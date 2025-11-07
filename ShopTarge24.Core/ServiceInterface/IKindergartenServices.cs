@@ -12,5 +12,7 @@ namespace ShopTarge24.Core.ServiceInterface
         Task<Kindergarten?> Delete(Guid id);
 
         Task<Kindergarten> Update(KindergartenDto dto);
+
+        Task<bool> RemoveImage(Guid ImageId);
     }
 }
