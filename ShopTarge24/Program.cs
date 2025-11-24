@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using ShopTarge24.ApplicationServices.Services;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 using ShopTarge24.ApplicationServices.Services;
@@ -10,8 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
-builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
 builder.Services.AddScoped<IFileServices, FileServices>();
+builder.Services.AddScoped<IRealEstateServices, RealEstateServices>();
+builder.Services.AddScoped<IWeatherForecastServices, WeatherForecastServices>();
+builder.Services.AddScoped<OpenWeatherServices>();
+builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
+
 
 builder.Services.AddDbContext<ShopTarge24Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -32,6 +38,9 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.UseStaticFiles();
+
 
 app.MapControllerRoute(
     name: "default",

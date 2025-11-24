@@ -1,0 +1,71 @@
+﻿[
+    {
+        "Version": 1,
+        "Key": "127964",
+        "Type": "City",
+        "Rank": 30,
+        "LocalizedName": "Tallinn",
+        "EnglishName": "Tallinn",
+        "PrimaryPostalCode": "",
+        "Region": {
+            "ID": "EUR",
+            "LocalizedName": "Europe",
+            "EnglishName": "Europe"
+        },
+        "Country": {
+            "ID": "EE",
+            "LocalizedName": "Estonia",
+            "EnglishName": "Estonia"
+        },
+        "AdministrativeArea": {
+            "ID": "37",
+            "LocalizedName": "Harju",
+            "EnglishName": "Harju",
+            "Level": 1,
+            "LocalizedType": "County",
+            "EnglishType": "County",
+            "CountryID": "EE"
+        },
+        "TimeZone": {
+            "Code": "EEST",
+            "Name": "Europe/Tallinn",
+            "GmtOffset": 3,
+            "IsDaylightSaving": true,
+            "NextOffsetChange": "2025-10-26T01:00:00Z"
+        },
+        "GeoPosition": {
+            "Latitude": 59.437,
+            "Longitude": 24.771,
+            "Elevation": {
+                "Metric": {
+                    "Value": 22,
+                    "Unit": "m",
+                    "UnitType": 5
+                },
+                "Imperial": {
+                    "Value": 72,
+                    "Unit": "ft",
+                    "UnitType": 0
+                }
+            }
+        },
+        "IsAlias": false,
+        "SupplementalAdminAreas": [
+            {
+                "Level": 2,
+                "LocalizedName": "Tallinna",
+                "EnglishName": "Tallinna"
+            }
+        ],
+        "DataSets": [
+            "AirQualityCurrentConditions",
+            "AirQualityForecasts",
+            "Alerts",
+            "DailyPollenForecast",
+            "ForecastConfidence",
+            "FutureRadar",
+            "MinuteCast",
+            "Radar"
+        ]
+    }
+]
