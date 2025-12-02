@@ -13,5 +13,9 @@ namespace ShopTarge24.Core.ServiceInterface
         void UploadFilesToDatabase(RealEstateDto dto, RealEstate domain);
 
         void UploadFilesToDatabase(KindergartenDto dto, Kindergarten domain);
+
+        Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos);
+        Task<FileToDatabase> RemoveImageFromDatabase(FileToDatabaseDto dto);
+
     }
 }

@@ -57,6 +57,11 @@ namespace ShopTarge24.ApplicationServices.Services
             domain.CreatedAt = DateTime.Now;
             domain.ModifiedAt = DateTime.Now;
 
+            if (dto.Files != null)
+            {
+                _fileServices.UploadFilesToDatabase(dto, domain);
+            }
+
             _context.RealEstates.Update(domain);
             await _context.SaveChangesAsync();
 
