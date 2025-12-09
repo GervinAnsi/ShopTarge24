@@ -5,7 +5,7 @@ using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 using ShopTarge24.Models.Spaceships;
 
-namespace ShopTARge24.Controllers
+namespace ShopTarge24.Controllers
 {
     public class SpaceshipsController : Controller
     {

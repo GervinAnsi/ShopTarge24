@@ -3,7 +3,7 @@ using ShopTarge24.Models.ChuckNorris;
 using System.Net;
 using System.Text.Json;
 
-namespace ShopTARge24.Controllers
+namespace ShopTarge24.Controllers
 {
     public class ChuckNorrisController : Controller
     {

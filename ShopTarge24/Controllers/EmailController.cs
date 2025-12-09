@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopTarge24.ApplicationServices.Services;
+using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Models.Email;
 
 namespace ShopTarge24.Controllers
 {
     public class EmailController : Controller
     {
-        private readonly EmailServices _emailServices;
+        private readonly IEmailServices _emailServices;
 
-        public EmailController(EmailServices emailServices)
+        public EmailController
+            (
+            IEmailServices emailServices
+            )
         {
             _emailServices = emailServices;
         }

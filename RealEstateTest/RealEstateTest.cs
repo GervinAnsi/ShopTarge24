@@ -4,7 +4,7 @@ using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.RealEstateTest;
 
 
-namespace ShopTARge24.RealEstateTest
+namespace ShopTarge24.RealEstateTest
 {
     public class RealEstateTest : TestBase
     {

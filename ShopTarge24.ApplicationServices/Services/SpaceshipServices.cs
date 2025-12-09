@@ -5,7 +5,7 @@ using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 
 
-namespace ShopTARge24.ApplicationServices.Services
+namespace ShopTarge24.ApplicationServices.Services
 {
     public class SpaceshipServices : ISpaceshipServices
     {

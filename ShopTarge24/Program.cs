@@ -3,7 +3,6 @@ using Microsoft.Extensions.FileProviders;
 using ShopTarge24.ApplicationServices.Services;
 using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
-using ShopTARge24.ApplicationServices.Services;
 using ShopTarge24.Hubs;
 using ShopTarge24.Controllers;
 using ShopTarge24.Core.Domain;
@@ -28,7 +27,7 @@ builder.Services.AddDbContext<ShopTarge24Context>(options =>
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-
+    options.Password.RequiredLength = 3;
 })
     .AddEntityFrameworkStores<ShopTarge24Context>()
     .AddDefaultTokenProviders()
