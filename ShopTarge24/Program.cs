@@ -5,6 +5,9 @@ using ShopTarge24.Core.ServiceInterface;
 using ShopTarge24.Data;
 using ShopTARge24.ApplicationServices.Services;
 using ShopTarge24.Hubs;
+using ShopTarge24.Controllers;
+using ShopTarge24.Core.Domain;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +21,19 @@ builder.Services.AddScoped<IWeatherForecastServices, WeatherForecastServices>();
 builder.Services.AddScoped<OpenWeatherServices>();
 builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
 builder.Services.AddSignalR();
+builder.Services.AddScoped<IEmailServices, EmailServices>();
 
 builder.Services.AddDbContext<ShopTarge24Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+
+})
+    .AddEntityFrameworkStores<ShopTarge24Context>()
+    .AddDefaultTokenProviders()
+    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
+/*.AddDefaultUI()*/
 
 var app = builder.Build();
 

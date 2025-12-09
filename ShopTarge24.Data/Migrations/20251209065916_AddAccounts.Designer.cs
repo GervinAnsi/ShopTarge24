@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopTarge24.Data;
 
@@ -11,9 +12,11 @@ using ShopTarge24.Data;
 namespace ShopTarge24.Data.Migrations
 {
     [DbContext(typeof(ShopTarge24Context))]
-    partial class ShopTarge24ContextModelSnapshot : ModelSnapshot
+    [Migration("20251209065916_AddAccounts")]
+    partial class AddAccounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
