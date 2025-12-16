@@ -36,6 +36,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 var app = builder.Build();
 
+app.MapControllers().RequireAuthorization();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
