@@ -27,7 +27,12 @@ builder.Services.AddDbContext<ShopTarge24Context>(options =>
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
+    options.SignIn.RequireConfirmedAccount = true;
     options.Password.RequiredLength = 3;
+
+    options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+    options.Lockout.MaxFailedAccessAttempts = 3;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
 })
     .AddEntityFrameworkStores<ShopTarge24Context>()
     .AddDefaultTokenProviders()
