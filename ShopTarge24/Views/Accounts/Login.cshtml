@@ -40,22 +40,11 @@
         </form>
     </div>
 
-    <div class="col-md-6">
-        <h1>External Login</h1>
-        <script src="https://accounts.google.com/gsi/client" async></script>
-        <div id="g_id_onload"
-             data-client_id="565967936274-h8gip87n5pg1rdliipe7fm4s7mg0qjeb.apps.googleusercontent.com"
-             data-login_uri="https://localhost:7042"
-             data-auto_prompt="false">
+    <form asp-controller="Accounts" asp-action="ExternalLogin" asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]" method="post">
+        <div>
+            <button type="submit" class="btn btn-primary" name="provider" value="Google">
+                Log in with Google
+            </button>
         </div>
-        <div class="g_id_signin"
-             data-type="standard"
-             data-size="large"
-             data-theme="outline"
-             data-text="sign_in_with"
-             data-shape="rectangular"
-             data-logo_alignment="left">
-        </div>
-
-    </div>
+    </form>
 </div>

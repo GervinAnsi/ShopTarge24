@@ -39,6 +39,16 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
 /*.AddDefaultUI()*/
 
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]
+                ?? throw new InvalidOperationException("Google ClientId not found.");
+
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]
+            ?? throw new InvalidOperationException("Google ClientSecret not found.");
+    });
+
 var app = builder.Build();
 
 app.MapControllers().RequireAuthorization();
@@ -54,6 +64,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
